@@ -4,6 +4,7 @@ class ArticlesController < ApplicationController
   end
 def show
     @article = Article.find(params[:id])
+    @tags = Tag.all
 end
 def new
   @article = Article.new
@@ -25,6 +26,12 @@ def create
   else
     render 'new'
   end
+end
+def add_tag
+  @article = Article.find(params[:id])
+  tag_id = params[:tag_id]
+  ArticleTag.create! tag_id: tag_id, article_id: @article.id
+  redirect_to article_path(@article)
 end
 def update
   @article = Article.find(params[:id])

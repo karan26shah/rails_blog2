@@ -4,7 +4,8 @@ class ArticlesController < ApplicationController
   end
 def show
     @article = Article.find(params[:id])
-    @tags = Tag.all
+    @tag_ids = ArticleTag.where(article_id: @article.id).pluck(:tag_id).uniq
+    @tags = Tag.where.not(id: @tag_ids)
 end
 def new
   @article = Article.new
@@ -12,7 +13,6 @@ end
 def destroy
   @article = Article.find(params[:id])
   @article.destroy
- 
   redirect_to articles_path
 end
  def edit
@@ -20,7 +20,6 @@ end
 end
 def create
   @article = Article.new(article_params)
- 
   if @article.save
     redirect_to @article
   else
